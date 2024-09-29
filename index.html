@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDEXPRE</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* General resets */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: white;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .welcome {
+      text-align: center;
+      color: rgb(0, 0, 0);
+      font-size: 3rem;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+    }
+
+    .fade-in {
+      opacity: 1;
+    }
+
+    .fade-out {
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+    }
+
+    .login-container {
+      background-color: white;
+      padding: 50px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      display: none;
+      width: 90%;
+      max-width: 500px;
+      height: 400px;
+      margin-bottom: 150px;
+      position: relative;
+    }
+
+    .login-container h2 {
+      margin-bottom: 20px;
+    }
+
+    .form-control {
+      margin-bottom: 15px;
+      font-size: 1rem;
+      width: 100%;
+    }
+
+    .btn-block {
+      padding: 12px;
+      font-size: 1rem;
+      width: 100%;
+    }
+
+    .error-message {
+      color: red;
+      display: none;
+      margin-top: 10px;
+    }
+
+    .success-message {
+      color: green;
+      display: none;
+      margin-top: -10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .full-screen {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Style the image */
+    .welcome-image {
+      position: absolute;
+      margin-top: -250px;
+      margin-left: 130px;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 1.5s ease, transform 0.5s ease, top 0.5s ease;
+    }
+
+    .welcome-image.fade-in {
+      opacity: 1;
+    }
+
+    .welcome-image.fade-out {
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+    }
+
+    .welcome-image.move-back-to-top {
+      margin-bottom: 1000px;
+      display: block;
+      margin-left: 700px;
+      margin-right: 4000px;
+      opacity: 1;
+      transition: transform 0.5s ease, top 0.5s ease, opacity 1.5s ease-in-out;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Welcome Animation -->
+  <div id="welcome" class="full-screen">
+    <h1 class="welcome"><span class="brand">EdexCloud LLC</span></h1>
+    <img id="welcomeImage" src="EdexCloud-128x128 (1).png" alt="Logo" class="welcome-image">
+  </div>
+
+  <!-- Login Form -->
+  <div id="login-form" class="login-container mx-auto">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Username" id="username" required>
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-control" placeholder="Password" id="password" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Submit</button>
+      <p class="error-message" id="error-message">Error: Invalid username or password</p>
+      <p class="Notice" style="margin-top: 45px;"><b>Note:</b> <i style="color: grey;">Enter Your credentials</i></p>
+      <p class="success-message" id="success-message">Login Successful!</p>
+    </form>
+    <img id="loginImage" src="EdexCloud-128x128 (1).png" alt="Logo on form" class="welcome-image hidden move-back-to-top">
+  </div>
+
+  <!-- Audio element -->
+  <audio id="welcomeSound">
+    <source src="Sound.mpeg" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Bootstrap and JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const welcome = document.querySelector('.welcome');
+      const loginForm = document.getElementById('login-form');
+      const audio = document.getElementById('welcomeSound');
+      const welcomeImage = document.getElementById('welcomeImage');
+      const loginImage = document.getElementById('loginImage');
+
+      // Play sound after 2 seconds
+      setTimeout(() => {
+        audio.play();
+      }, 750); // Sound starts playing after 2 seconds
+
+      // Fade in welcome text and image
+      setTimeout(() => {
+        welcome.classList.add('fade-in');
+        welcomeImage.classList.add('fade-in');
+      }, 1000);
+
+      // After 3 seconds, fade out welcome text and image, and stop sound
+      setTimeout(() => {
+        welcome.classList.remove('fade-in');
+        welcome.classList.add('fade-out');
+        welcomeImage.classList.remove('fade-in');
+        welcomeImage.classList.add('fade-out');
+        audio.pause(); // Stop the sound
+        audio.currentTime = 0; // Reset sound to the beginning
+      }, 3600); // 3 seconds display time
+
+      // After 5 seconds, show login form and move image on top of it
+      setTimeout(() => {
+        document.getElementById('welcome').classList.add('hidden'); // Hide welcome screen
+        loginForm.style.display = 'block'; // Show login form
+        loginImage.classList.remove('hidden'); // Show image on top of login form
+      }, 5200); // 5 seconds total delay for login form to appear
+    });
+
+    // Form validation script
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+      e.preventDefault(); // Prevent form from submitting normally
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorMessage = document.getElementById('error-message');
+      const successMessage = document.getElementById('success-message');
+
+      // Validate credentials
+      if (username === "admin" && password === "pass") {
+        errorMessage.style.display = 'none'; // Hide error message if successful
+        successMessage.style.display = 'block'; // Show success message in green
+
+        // Redirect after 2 seconds
+        setTimeout(() => {
+          window.location.href = "https://www.edexcloud.com";
+        }, 2000); // 2-second delay
+      } else {
+        successMessage.style.display = 'none'; // Hide success message if unsuccessful
+        errorMessage.style.display = 'block'; // Show error message on failure
+      }
+    });
+  </script>
+
+</body>
+</html>
